@@ -5,4 +5,4 @@ from django.apps import AppConfig
 
 
 class ResumeRankerConfig(AppConfig):
-    name = 'resume_ranker'
+    name = 'Recruiter_HM'

@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth.models import User
 from taggit.managers import TaggableManager
 from django.core.validators import MinLengthValidator
 
@@ -25,7 +26,17 @@ class JobPosts(models.Model):
     updated_timestamp=models.DateField()
     deleted_timestamp=models.DateField()
     
-    
+
+
+class Profile(models.Model):
+    user=models.OneToOneField(User,on_delete=models.CASCADE)
+    AID=models.CharField(max_length=7,validators=[MinLengthValidator(7)])
+    role=models.CharField(max_length=17,validators=[MinLengthValidator(9)])
+    updated_timestamp=models.DateField(null=True, blank=True)
+
+
+
+
     
 
 

@@ -5,9 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fidelity | Application Portal</title>
+
+    <style>
+        .c-header{
+            background-color: #B8BAC8;
+            width:2000px;
+            height: 150px;
+            padding: 20px;
+        }
+
+        .c-header img{
+            float: left;
+            width:20%;
+            height: 15%;
+        }
+        .c-footer{
+            background-color: #BD0B1B;
+            width:2000px;
+            height: 50px;
+            bottom: 0;
+            position:fixed;
+        }
+
+
+    </style>
 </head>
 <body>
+    <header class="c-header">
+        <div id="div-header" >
+            <img src="https://www.fidelity.com.au/fidelity/includes/themes/MuraBootstrap4/images/logo.png">
+
+        </div>
+    </header>
     {% block content%}
     {% endblock %}
+    <footer class="c-footer">
+        <div id="div-footer"></div>
+    </footer>
 </body>
 </html>

@@ -18,5 +18,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^posts/',include('resume_ranker.urls')),
+    url(r'^candidate/',include('candidate.urls')),
     url(r'^admin/', admin.site.urls),
 ]

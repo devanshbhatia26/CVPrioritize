@@ -13,7 +13,7 @@ def job_post(request):
              print(tags)
              for i in range(len(tags)):
                 if(tags[i]==request.POST['secondary_skills']):
-                    raise forms.ValidationError('You Cannot enter the same skills again')
+                    return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
              form.save()
     form=JobPostForm() 
     return render(request,'job_post.html',{'form':form})

@@ -18,9 +18,9 @@ class JobPosts(models.Model):
     responsibilities = models.TextField(max_length=2000,validators=[MinLengthValidator(30)])
     overall_experience = models.CharField(max_length=6, choices=EXPERIENCE_CHOICES, default='1-3')
     primary_skills=TaggableManager(help_text='comma separted tags')
-    secondary_skills=models.CharField(max_length=8,required=False,validators=[MinLengthValidator(1)])
-    tertiary_skills=models.CharField(max_length=8,required=False,validators=[MinLengthValidator(1)])
-    status=models.CharField(max_length=20,validators=[MinLengthValidator(3)]
+    secondary_skills=models.CharField(max_length=8,blank=True,validators=[MinLengthValidator(1)])
+    tertiary_skills=models.CharField(max_length=8,blank=True,validators=[MinLengthValidator(1)])
+    status=models.CharField(max_length=20,validators=[MinLengthValidator(3)])
     created_timestamp=models.DateField()
     updated_timestamp=models.DateField()
     deleted_timestamp=models.DateField()

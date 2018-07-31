@@ -10,7 +10,26 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,login,logout
 
 
-@login_required
+
+
+def Send_jobpost(request):
+    if request.method=="POST":
+        form=JobPostForm(request.POST)
+        if form.is_valid():
+            tags=list(request.POST['primary_skills'])
+             print(tags)
+             for i in range(len(tags)):
+                if(tags[i]==request.POST['secondary_skills']):
+                    return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
+            u=form.save(commit=False)
+            u.created_timestamp=timezone.now()
+            u.save()
+            u.status=1
+            form.save_m2m()
+            return redirect("/portal/dashboard")
+
+
+
 def job_post(request):
     if request.method=="POST":
          form=JobPostForm(request.POST)
@@ -22,10 +41,23 @@ def job_post(request):
                     return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
              u=form.save(commit=False)
              u.created_timestamp=timezone.now()
+             u.status=0
              u.save()
              form.save_m2m()
+             return redirect("/portal/dashboard")
+
+             
     form=JobPostForm() 
     return render(request,'job_post.html',{'form':form})
+
+
+def job_post_details(request,status):
+    if(status==6):
+        jobs=JobPost.objects.all()
+    else:
+        jobs=JobPost.objects.filter(status=status)
+    return render(request,'job_post_list.html',{status:'status'})
+
 
 def dashboard(request):
     if request.session.get('access')=='Hiring Manager':

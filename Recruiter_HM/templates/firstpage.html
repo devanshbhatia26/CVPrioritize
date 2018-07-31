@@ -49,7 +49,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">Hiring Manager Dashboard</a>
+                <a class="navbar-brand" href="index.html">{{ access }} Dashboard</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -97,7 +97,7 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge"> {{re_c}}</div>
-                                    <div>Received</div>
+                                    <div>{{Received}}</div>
                                 </div>
                             </div>
                         </div>
@@ -119,7 +119,7 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge"> {{req_c}}</div>
-                                    <div>Requested</div>
+                                    <div>{{Requested}}</div>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +141,7 @@
                                 </div>
                                 <div class="col-xs-9 text-right">
                                     <div class="huge">{{ pub_c}}</div>
-                                    <div>Published</div>
+                                    <div>{{Published}}</div>
                                 </div>
                             </div>
                         </div>
@@ -154,6 +154,7 @@
                         </a>
                     </div>
                 </div>
+                {% if access == "Hiring Manager" %}
                 <div class="col-lg-3 col-md-6">
                     <div class="panel panel-red">
                         <div class="panel-heading">
@@ -177,6 +178,8 @@
                     </div>
                 </div>
             </div>
+            {% else %}
+            {% endif %}
             <!-- /.row -->
             <div class="row">
                 <div class="col-lg-8">

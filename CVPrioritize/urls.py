@@ -17,7 +17,7 @@ from django.conf.urls import url,include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^posts/',include('Recruiter_HM.urls')),
+    url(r'^portal/',include('Recruiter_HM.urls')),
     url(r'^candidate/',include('candidate.urls')),
     url(r'^admin/', admin.site.urls),
 ]

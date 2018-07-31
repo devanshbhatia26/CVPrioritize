@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+LOGIN_URL='/portal'
+
 
 INSTALLED_APPS = [
     'candidate',

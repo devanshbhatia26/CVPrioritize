@@ -22,7 +22,7 @@ class JobPost(models.Model):
     primary_skills=TaggableManager(help_text='comma separted tags')
     secondary_skills=models.CharField(max_length=8,blank=True,validators=[MinLengthValidator(1)])
     tertiary_skills=models.CharField(max_length=8,blank=True,validators=[MinLengthValidator(1)])
-    status=models.IntegerField(max_length=20,null=True,blank=True,validators=[MinLengthValidator(3)])
+    status=models.IntegerField()
     created_timestamp=models.DateTimeField()
     updated_timestamp=models.DateTimeField(null=True, blank=True)
     deleted_timestamp=models.DateTimeField(null=True, blank=True)

@@ -26,6 +26,7 @@ def Send_jobpost(request):
             u=form.save(commit=False)
             u.created_timestamp=timezone.now()
             u.status=1
+            print u.status
             u.save()
             form.save_m2m()
             request.session['access']=access
@@ -39,13 +40,12 @@ def job_post(request):
          form=JobPostForm(request.POST)
          if form.is_valid():
              tags=list(request.POST['primary_skills'])
-             print(tags)
              for i in range(len(tags)):
                 if(tags[i]==request.POST['secondary_skills']):
                     return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
              u=form.save(commit=False)
              u.created_timestamp=timezone.now()
-             u.status=0
+             u.status=1
              u.save()
              form.save_m2m()
              request.session['access']=access
@@ -70,16 +70,16 @@ def dashboard(request):
         if request.session.get('access')=='Hiring Manager':
             access=request.session.get('access')
             try:
-                recieved_count=JobPost.objects.get(status=2).count()
+                recieved_count=JobPost.objects.filter(status=2).count()
             except JobPost.DoesNotExist:
                 recieved_count=0
             try:
-                requested_count=JobPost.objects.get(status=1).count()
+                requested_count=JobPost.objects.filter(status=1).count()
             except JobPost.DoesNotExist:
                 requested_count=0
             
             try:
-                published_count=JobPost.objects.get(status=2).count()
+                published_count=JobPost.objects.filter(status=2).count()
             except JobPost.DoesNotExist:
                 published_count=0
 
@@ -89,17 +89,17 @@ def dashboard(request):
         else:
              access=request.session.get('access')
              try:
-                 recieved_count=JobPost.objects.get(status=2).count()
+                 recieved_count=JobPost.objects.filter(status=2).count()
              except JobPost.DoesNotExist:
                  recieved_count=0
 
              try:
-                 requested_count=JobPost.objects.get(status=1).count()
+                 requested_count=JobPost.objects.filter(status=1).count()
              except JobPost.DoesNotExist:
                  requested_count=0
              
              try:
-                 published_count=JobPost.objects.get(status=2).count()
+                 published_count=JobPost.objects.filter(status=2).count()
              except JobPost.DoesNotExist:
                  published_count=0
 

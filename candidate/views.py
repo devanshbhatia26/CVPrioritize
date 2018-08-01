@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Candidate
 from .forms import EditDetails, UploadFile
 # Create your views here.
@@ -10,13 +10,16 @@ from .forms import EditDetails, UploadFile
 
 def index(request):
     if (request.method == 'POST'):
-         form = UploadFile(request.POST, request.FILES)
-         if form.is_valid():
-            # file is saved
-            form.save()
+        form = UploadFile(request.POST, request.FILES)
+        if form.is_valid():
+            print "here1"
+            return HttpResponseRedirect(reverse('editdetails'))
+        else:
+            print "here2"
     else:
+        print "here3"
         form = UploadFile()
-        return render(request, 'candidate/index.html', {'form': form})
+    return render(request, 'candidate/index.html', {'form': form})
 
 def editdetails(request):
     if request.method == 'POST':

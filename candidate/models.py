@@ -14,7 +14,7 @@ EXPERIENCE_CHOICES = (
 )
 
 class Candidate(models.Model):
-    name= models.CharField(max_length=100, validators=[MinLengthValidator(3)])
+    name = models.CharField(max_length=100, validators=[MinLengthValidator(3)])
     email= models.EmailField()
     address= models.TextField(max_length=100, validators=[MinLengthValidator(3)])
     pincode = models.IntegerField()

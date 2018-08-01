@@ -29,6 +29,8 @@ ALLOWED_HOSTS = []
 
 
 # Application definition
+LOGIN_URL='/portal'
+
 
 INSTALLED_APPS = [
     'candidate',
@@ -38,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'resume_ranker',
+    'Recruiter_HM',
     'taggit',
 ]
 

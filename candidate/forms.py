@@ -13,3 +13,5 @@ class EditDetails(forms.Form):
     Qualifiction=forms.CharField(min_length=20,max_length=2000,widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Qualification'}))
     Skills=forms.MultiValueField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Skills'}))
 
+class UploadFile(forms.Form):
+    file = forms.FileField(label = "")

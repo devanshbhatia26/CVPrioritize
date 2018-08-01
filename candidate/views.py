@@ -4,12 +4,19 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Candidate
-from .forms import EditDetails
+from .forms import EditDetails, UploadFile
 # Create your views here.
 
 
 def index(request):
-    return render(request, 'candidate/index.html', {})
+    if (request.method == 'POST'):
+         form = UploadFile(request.POST, request.FILES)
+         if form.is_valid():
+            # file is saved
+            form.save()
+    else:
+        form = UploadFile()
+        return render(request, 'candidate/index.html', {'form': form})
 
 def editdetails(request):
     if request.method == 'POST':
@@ -44,3 +51,4 @@ def editdetails(request):
 
         form = EditDetails()
     return render(request, 'candidate/editdetails.html', {'form': form})
+

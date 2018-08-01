@@ -40,7 +40,7 @@ class ForgetPassword(forms.Form):
 class JobPostForm(forms.ModelForm):
     class Meta:
         model=JobPost
-        fields=['title','responsibilities','qualification','overall_experience','primary_skills','secondary_skills']
+        fields=['title','responsibilities','qualification','overall_experience','primary_skills','secondary_skills','tertiary_skills']
         
 
 class Candidate(forms.Form):

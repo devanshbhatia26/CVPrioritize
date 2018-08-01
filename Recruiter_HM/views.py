@@ -12,26 +12,30 @@ from django.contrib.auth import authenticate,login,logout
 
 
 
+
 def Send_jobpost(request):
     if request.method=="POST":
+        access=request.session.get('access')
         form=JobPostForm(request.POST)
         if form.is_valid():
             tags=list(request.POST['primary_skills'])
-             print(tags)
-             for i in range(len(tags)):
+            print(tags)
+            for i in range(len(tags)):
                 if(tags[i]==request.POST['secondary_skills']):
                     return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
             u=form.save(commit=False)
             u.created_timestamp=timezone.now()
-            u.save()
             u.status=1
+            u.save()
             form.save_m2m()
+            request.session['access']=access
             return redirect("/portal/dashboard")
 
 
 
 def job_post(request):
     if request.method=="POST":
+         access=request.session.get('access')
          form=JobPostForm(request.POST)
          if form.is_valid():
              tags=list(request.POST['primary_skills'])
@@ -44,6 +48,7 @@ def job_post(request):
              u.status=0
              u.save()
              form.save_m2m()
+             request.session['access']=access
              return redirect("/portal/dashboard")
 
              
@@ -60,25 +65,64 @@ def job_post_details(request,status):
 
 
 def dashboard(request):
-    if request.session.get('access')=='Hiring Manager':
-        access=request.session.get('access')
-        re_c = request.session.get('re_c')
-        req_c = request.session.get('req_c')
-        pub_c = request.session.get('pub_c')
-        Recieved = request.session.get('Recieved')
-        Requested = request.session.get('Requested')
-        Published = request.session.get('Published')
-        data_dict = {'re_c': re_c,'req_c':req_c,'pub_c':pub_c,'Received':Recieved,'Requested':Requested,'Published':Published,'access':access}
+    jobs=JobPost.objects.all()
+    if jobs:
+        if request.session.get('access')=='Hiring Manager':
+            access=request.session.get('access')
+            try:
+                recieved_count=JobPost.objects.get(status=2).count()
+            except JobPost.DoesNotExist:
+                recieved_count=0
+            try:
+                requested_count=JobPost.objects.get(status=1).count()
+            except JobPost.DoesNotExist:
+                requested_count=0
+            
+            try:
+                published_count=JobPost.objects.get(status=2).count()
+            except JobPost.DoesNotExist:
+                published_count=0
+
+
+            data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Recieved','Requested':'Requested','Published':'Published','access':access}
+            
+        else:
+             access=request.session.get('access')
+             try:
+                 recieved_count=JobPost.objects.get(status=2).count()
+             except JobPost.DoesNotExist:
+                 recieved_count=0
+
+             try:
+                 requested_count=JobPost.objects.get(status=1).count()
+             except JobPost.DoesNotExist:
+                 requested_count=0
+             
+             try:
+                 published_count=JobPost.objects.get(status=2).count()
+             except JobPost.DoesNotExist:
+                 published_count=0
+
+             data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Sent','Requested':'Pending','Published':'Published','access':access}
+        return render(request,'firstpage.html',data_dict)
+    
     else:
-        access=request.session.get('access')
-        re_c = request.session.get('re_c')
-        req_c = request.session.get('req_c')
-        pub_c = request.session.get('pub_c')
-        Recieved = request.session.get('Recieved')
-        Requested = request.session.get('Requested')
-        Published = request.session.get('Published')
-        data_dict = {'re_c': re_c,'req_c':req_c,'pub_c':pub_c,'Received':Recieved,'Requested':Requested,'Published':Published,'access':access}
-    return render(request,'firstpage.html',data_dict)
+
+        if request.session.get('access')=='Hiring Manager':
+            access=request.session.get('access')
+            recieved_count=0
+            requested_count=0
+            published_count=0
+            data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Recieved','Requested':'Requested','Published':'Published','access':access}
+    
+        else:
+            access=request.session.get('access')
+            recieved_count=0
+            requested_count=0
+            published_count=0
+            data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Sent','Requested':'Pending','Published':'Published','access':access}
+        return render(request,'firstpage.html',data_dict)
+
 
 
 def signin(request):
@@ -94,53 +138,13 @@ def signin(request):
                 if users is not None:
                     login(request,users)
                     if u.role=='Hiring Manager':
-                        access="Hiring Manager"
-                        jobs=JobPost.objects.all()
-                        if jobs:
-                            recieved_count=JobPost.objects.get(status=2).count()
-                            requested_count=JobPost.objects.get(status=1).count()
-                            published_count=JobPost.objects.get(status=3).count()
-                            request.session['re_c'] = recieved_count
-                            request.session['req_c'] = requested_count
-                            request.session['pub_c'] = published_count
-                            request.session['Recieved'] = 'Received'
-                            request.session['Requested'] = 'Requested'
-                            request.session['Published'] = 'Published'
-
-                        else:
-                            request.session['access']=access
-                            request.session['re_c'] = 0
-                            request.session['req_c'] =0
-                            request.session['pub_c'] = 0
-                            request.session['Recieved'] = 'Received'
-                            request.session['Requested'] = 'Requested'
-                            request.session['Published'] = 'Published'
-
+                        access="Hiring Manager"            
+                        request.session['access'] = access                                
                         return redirect("/portal/dashboard")
 
                     else:
                         access="Recruiter"
-                        jobs=JobPost.objects.all()
-                        if jobs:
-                            pending_count=JobPost.objects.get(status=1).count()
-                            sent_count=JobPost.objects.get(status=2).count()
-                            published_count=JobPost.objects.get(status=3).count()
-                            request.session['access']=access
-                            request.session['re_c'] = pending_count
-                            request.session['req_c'] = sent_count
-                            request.session['pub_c'] = published_count
-                            request.session['Recieved'] = 'Sent'
-                            request.session['Requesteed'] = 'Pending'
-                            request.session['Published'] = 'Published'
-                        else:
-                            request.session['access']=access
-                            request.session['re_c'] = 0
-                            request.session['req_c'] =0
-                            request.session['pub_c'] = 0
-                            request.session['Recieved'] = 'Sent'
-                            request.session['Requested'] = 'Pending'
-                            request.session['Published'] = 'Published'
-
+                        request.session['access'] = access
                         return redirect("/portal/dashboard")
                 else:
                     messages.error(request,'Incorrect Username or Password')

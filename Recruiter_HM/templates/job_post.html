@@ -44,8 +44,8 @@
                         {{field}}
                     </div>
                     {% endfor %}
-                    <button class="btn btn-success">Save</button>
-                   
+                    <a href='{% url 'job_post' %}'><button class="btn btn-success">Save</button></a>
+                    <a href='{% url 'Send_jobpost' %}'><button class="btn btn-success">Submit</button></a>
             </div>
             </form>
         </div>

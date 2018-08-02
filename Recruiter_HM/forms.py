@@ -1,20 +1,16 @@
 from django import forms
-from .models import JobPosts
+from .models import JobPost
 
 
 
 class LoginForm(forms.Form):
-    use_required_attribute=False
-    AID=forms.CharField(min_length=7,max_length=7,widget=forms.TextInput(attrs={'class':'form-control','placeholder':'AID','pattern':'0-9a-zA-Z'}))
+    AID=forms.CharField(min_length=7,max_length=7,widget=forms.TextInput(attrs={'class':'form-control','placeholder':'AID'}))
     Password=forms.CharField(min_length=8,widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Password'}))
-    def clean(self):
-        cleaned_data=super().clean()
-        AID=cleaned_data.get('AID')
-        Password=cleaned_data.get('Password')
+   
 
 
 class ChangePassword(forms.Form):
-    use_required_attribute=False
+    
     Old_Password=forms.CharField(min_length=8,widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Old Password'}))
     New_Password=forms.CharField(min_length=8,widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'New Password'}))
     Confirm_Password=forms.CharField(min_length=8,widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'Confirm New Password'}))
@@ -43,8 +39,8 @@ class ForgetPassword(forms.Form):
 
 class JobPostForm(forms.ModelForm):
     class Meta:
-        model=JobPosts
-        fields=['title','responsibilities','overall_experience','primary_skills','secondary_skills']
+        model=JobPost
+        fields=['title','responsibilities','qualification','overall_experience','primary_skills','secondary_skills']
         
 
 class Candidate(forms.Form):
@@ -56,4 +52,4 @@ class Candidate(forms.Form):
     Pin=forms.CharField(min_length=6,max_length=6,widget=forms.NumberInput(attrs={'class':'form-control','placeholder':'PIN'}))
     Experience=forms.CharField(min_length=1,max_length=2,widget=forms.NumberInput(attrs={'class':'form-control','placeholder':'Experience'}))
     Qualifiction=forms.CharField(min_length=20,max_length=2000,widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Qualification'}))
-    Skills=forms.MultiValueField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Skills'}))
+  

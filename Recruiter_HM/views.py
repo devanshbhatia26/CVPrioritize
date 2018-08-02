@@ -45,7 +45,7 @@ def job_post(request):
                     return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
              u=form.save(commit=False)
              u.created_timestamp=timezone.now()
-             u.status=1
+             u.status=0
              u.save()
              form.save_m2m()
              request.session['access']=access
@@ -57,12 +57,40 @@ def job_post(request):
 
 
 def job_post_details(request,status):
-    if(status==6):
+    k1=''
+    k2=''
+    k3=''
+    k4=''
+    k5=''
+    k6=''
+    print(status)
+    access=request.session.get('access')
+    
+    if(status == '6'):
         jobs=JobPost.objects.all()
     else:
         jobs=JobPost.objects.filter(status=status)
-    return render(request,'job_post_list.html',{status:'status'})
-
+        if(status == '0'):
+            k1="checked"
+        elif(status == '1'):
+            k2="checked"
+        elif(status == '2'):
+            k3="checked"
+        elif(status== '3'):
+            k4="checked"
+        elif(status== '4'):
+            k5="checked"
+        elif(status=='5'):
+            k6="checked"
+        else:
+            pass
+        
+    if access=="Hiring Manager":
+        data_dict={'status':status,'access':access,'jobs':jobs,'Received':'Received','Requested':'Requested','k1':k1,'k2':k2,'k3':k3,'k4':k4,'k5':k5,'k6':k6}
+    else:
+        data_dict={'status':status,'access':access,'jobs':jobs,'Received':'Sent','Requested':'Pending','k2':k2,'k3':k3,'k4':k4,'k5':k5,'k6':k6}
+    return render(request,'job_post_list.html',data_dict)
+ 
 
 def dashboard(request):
     jobs=JobPost.objects.all()
@@ -83,7 +111,7 @@ def dashboard(request):
             except JobPost.DoesNotExist:
                 published_count=0
 
-
+            request.session['access'] = access
             data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Recieved','Requested':'Requested','Published':'Published','access':access}
             
         else:
@@ -102,7 +130,7 @@ def dashboard(request):
                  published_count=JobPost.objects.filter(status=2).count()
              except JobPost.DoesNotExist:
                  published_count=0
-
+             request.session['access'] = access
              data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Sent','Requested':'Pending','Published':'Published','access':access}
         return render(request,'firstpage.html',data_dict)
     
@@ -113,6 +141,7 @@ def dashboard(request):
             recieved_count=0
             requested_count=0
             published_count=0
+            request.session['access'] = access
             data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Recieved','Requested':'Requested','Published':'Published','access':access}
     
         else:
@@ -120,8 +149,12 @@ def dashboard(request):
             recieved_count=0
             requested_count=0
             published_count=0
+            request.session['access'] = access
             data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Sent','Requested':'Pending','Published':'Published','access':access}
         return render(request,'firstpage.html',data_dict)
+
+
+
 
 
 

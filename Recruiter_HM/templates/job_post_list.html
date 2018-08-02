@@ -15,7 +15,7 @@
         function UpdatePKFunction(pk) {
           $.ajax({
             url: "{% url 'job_post_details' pk}",
-            method:POST
+            method:GET
            
           });
         };
@@ -83,41 +83,41 @@
 			        </span>
                     </label>
                     {% elif access == 'Recruiter' %}
-                    
-                    <form action='{% url 'job_post_details' status=1 %}'>
+
+                   
                         <label class="form-check">
-                     <input class="form-check-input" type="radio" name="exampleRadio"  {{k2}}></a>
+                     <input class="form-check-input" type="radio" name="exampleRadio" id=1  {{k2}}></a>
                        <span class="form-check-label">
                         Pending
                         </span>
                         </label>
-                    </form>
+                 
 
-                    <form action='{% url 'job_post_details' status=2 %}'>
+                    
                         <label class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadio" onclick='UpdatePKFunction(2)' {{k3}}>
+                        <input class="form-check-input" type="radio" name="exampleRadio" id='2' onclick='UpdatePKFunction(2)' {{k3}}>
                        <span class="form-check-label">
                         Sent
                         </span>
                         </label>
-                        </form>
+                      
     
                         <label class="form-check">
-                        <a href="http://localhost:8000/portal/job_post_details/3/"> <input class="form-check-input" type="radio" name="exampleRadio" {{k4}}></a>
+                        <a href="http://localhost:8000/portal/job_post_details/3/"> <input class="form-check-input" type="radio" name="exampleRadio" id='3' {{k4}}></a>
                         <span class="form-check-label">
                         Published
                         </span>
                         </label>
     
                         <label class="form-check">
-                                <a href="http://localhost:8000/portal/job_post_details/4/"> <input class="form-check-input" type="radio" name="exampleRadio" {{k5}}></a>
+                                <a href="http://localhost:8000/portal/job_post_details/4/"> <input class="form-check-input" type="radio" name="exampleRadio" id=4 {{k5}}></a>
                         <span class="form-check-label">
                         Successfully Closed
                         </span>
                         </label>
     
                         <label class="form-check">
-                        <a href="http://localhost:8000/portal/job_post_details/5/"> <input class="form-check-input" type="radio" name="exampleRadio" {{k6}}></a>
+                        <a href="http://localhost:8000/portal/job_post_details/5/"> <input class="form-check-input" type="radio" name="exampleRadio" id=5 {{k6}}></a>
                         <span class="form-check-label">
                         Unsuccessfully Closed
                         </span>
@@ -148,7 +148,7 @@
             {% for job in jobs %}
             <tr>
             <td>{{ forloop.counter }}</td>
-            <td>{{ job.title }}</td>
+            <td><a href='{% url 'specific_post' job.id %}'>{{ job.title }}</a></td>
             <td>{{ job.status }}</td>
             {% if job.status == 0 and access == "Hiring Manager" %}
             <td class="table-light">Submit</td>
@@ -156,6 +156,8 @@
             <td class="table-light">Correct</td>
             {% elif job.status == 1 and access == "Recruiter" %}
             <td class="table-light">Review</td>
+            {% else %}
+            <td class="table-light"></td>
             {% endif %}
             </tr>
             {% endfor %}

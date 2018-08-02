@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,render_to_response
 from .forms import JobPostForm,LoginForm
 from .models import JobPost,Profile
 from django import forms
 from django.utils import timezone
+from taggit.models import Tag
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,login,logout
 
@@ -91,6 +92,15 @@ def job_post_details(request,status):
         data_dict={'status':status,'access':access,'jobs':jobs,'Received':'Sent','Requested':'Pending','k2':k2,'k3':k3,'k4':k4,'k5':k5,'k6':k6}
     return render(request,'job_post_list.html',data_dict)
  
+
+def specific_post(request,id):
+    u=JobPost.objects.get(id=id)
+    tag=Tag.objects.filter(jobpost=id)
+    
+    
+    return render(request,'specific_job_post.html',{'job':u,'Tag':tag})
+
+
 
 def dashboard(request):
     jobs=JobPost.objects.all()

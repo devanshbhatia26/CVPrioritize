@@ -57,7 +57,7 @@
         <div class="row" style="border:solid;border-width:2px;">
             <div class="col-sm-3" style="background-color:#d0e9c6"><b>Primary Skills</b></div>
            
-                <div class="col-sm-4.5" style="background-color: #a6e1ec"> {% for t in Tag %}{{ t }};  
+                <div class="col-sm-4.5" style="background-color: #a6e1ec"> {% for t in Tag %}{{ t }}<nbsp><nbsp>
                 {% endfor %}</div>
             </div>
         <div class="row" style="border-left: solid;border-right:solid;border-width:2px;">
@@ -77,23 +77,30 @@
             <br>
             <div class="row">
             <div class="col-sm-6"></div>
+            {% if access == "Hiring Manager" and job.status == 0 %}          
             <div class="col-sm-2">
-                {% if access == "Hiring Manager" and job.status==0 %}
                 <div class="container-fluid">
-                <button type="button"  class="btn btn-primary btn-block">Edit</button>
+               <a href='{% url 'edit_jd' job.id %}'><button type="button"  class="btn btn-primary btn-block">Edit</button></a>
                 </div>
-                {% else %}
-                {% endif %}
-            </div>     
+            </div>       
+            {% elif access == "Hiring Manager" and job.status == 2 %} 
             <div class="col-sm-2">
                 <div class="container-fluid">
-                    
-                <button type="button"  class="btn btn-primary btn-block">Action</button>
+                <button type="button"  class="btn btn-primary btn-block">Correct JD</button>
                 </div></div>  
-                <div class="col-sm-2">
+            {% elif access == "Recruiter" and job.status == 1 %}
+            <div class="col-sm-2">
                     <div class="container-fluid">
-                    <button type="button"  class="btn btn-primary btn-block">Action</button>
-                    </div></div>
+                    <button type="button"  class="btn btn-primary btn-block">Review JD</button>
+                    </div></div> 
+            {% elif access == "Hiring Manager" and job.status == 3 %}
+            <div class="col-sm-2">
+                    <div class="container-fluid">
+                    <button type="button"  class="btn btn-primary btn-block">Delete</button>
+                    </div></div> 
+            
+            {% else %}
+            {% endif %}
             </div>
         </div>
     </div>

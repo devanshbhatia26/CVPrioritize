@@ -57,13 +57,14 @@ def job_post(request):
     return render(request,'job_post.html',{'form':form})
 
 
-def job_post_details(request,status):
+def job_post_details(request):
     k1=''
     k2=''
     k3=''
     k4=''
     k5=''
     k6=''
+    status=request.GET.get('status')
     print(status)
     access=request.session.get('access')
     
@@ -94,12 +95,15 @@ def job_post_details(request,status):
  
 
 def specific_post(request,id):
+    access=request.session.get('access')
     u=JobPost.objects.get(id=id)
     tag=Tag.objects.filter(jobpost=id)
     
     
-    return render(request,'specific_job_post.html',{'job':u,'Tag':tag})
+    return render(request,'specific_job_post.html',{'job':u,'Tag':tag,'access':access})
 
+def edit_jd(request,id):
+    pass
 
 
 def dashboard(request):

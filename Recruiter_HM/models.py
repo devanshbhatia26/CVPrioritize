@@ -23,7 +23,7 @@ class JobPost(models.Model):
     secondary_skills=models.CharField(max_length=8,blank=True,validators=[MinLengthValidator(1)])
     tertiary_skills=models.CharField(max_length=8,blank=True,validators=[MinLengthValidator(1)])
     status=models.IntegerField()
-    created_timestamp=models.DateTimeField()
+    created_timestamp=models.DateTimeField(null=True,blank=True)
     updated_timestamp=models.DateTimeField(null=True, blank=True)
     deleted_timestamp=models.DateTimeField(null=True, blank=True)
     

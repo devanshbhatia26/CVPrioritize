@@ -27,7 +27,6 @@ def Send_jobpost(request):
             u=form.save(commit=False)
             u.created_timestamp=timezone.now()
             u.status=1
-            print u.status
             u.save()
             form.save_m2m()
             request.session['access']=access
@@ -94,16 +93,60 @@ def job_post_details(request):
     return render(request,'job_post_list.html',data_dict)
  
 
+
+
 def specific_post(request,id):
     access=request.session.get('access')
     u=JobPost.objects.get(id=id)
     tag=Tag.objects.filter(jobpost=id)
-    
-    
     return render(request,'specific_job_post.html',{'job':u,'Tag':tag,'access':access})
 
+
+
+def publish_jd(request,id):
+    job=JobPost.objects.get(id=id)
+    job.status=3
+    job.save()
+    return redirect("/portal/dashboard")
+
+
+def review_jd(request,id):
+    job=JobPost.objects.get(id=id)
+    job.status=2
+    job.save()
+    return redirect("/portal/dashboard")
+
+
 def edit_jd(request,id):
-    pass
+    access=request.session.get('access')
+    if(request.method== "POST"):
+        form=JobPostForm(request.POST)
+        if form.is_valid():
+            job=JobPost.objects.get(id=id)
+            job.title=request.POST['title']
+            job.responsibilities=request.POST['responsibilities']
+            job.qualification=request.POST['qualification']
+            tags=list(request.POST['primary_skills'])
+            for i in range(len(tags)):
+                if(tags[i]==request.POST['secondary_skills']):
+                    return render(request,'edit_jd.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
+            job.status=1
+            job.primary_skills=request.POST['primary_skills']
+            job.overall_experience=request.Post['overall_experience']
+            job.secondary_skills=request.POST['secondary_skills']
+            job.tertiary_skills=request.POST['tertiary_skills']
+            job.updated_timestamp=timezone.now()
+            job.save()
+            request.session['access']=access
+            return redirect("/portal/dashboard")
+
+    
+    job=JobPost.objects.get(id=id)
+    
+    initial={'title':job.title,'responsibilities':job.responsibilities,'qualification':job.qualification,'overall_experience': job.overall_experience,'secondary_skills':job.secondary_skills,'tertiary_skills':job.tertiary_skills}
+    form=JobPostForm(initial)
+    return render(request,'edit_jd.html',{'form':form})
+
 
 
 def dashboard(request):
@@ -121,7 +164,7 @@ def dashboard(request):
                 requested_count=0
             
             try:
-                published_count=JobPost.objects.filter(status=2).count()
+                published_count=JobPost.objects.filter(status=3).count()
             except JobPost.DoesNotExist:
                 published_count=0
 
@@ -141,7 +184,7 @@ def dashboard(request):
                  requested_count=0
              
              try:
-                 published_count=JobPost.objects.filter(status=2).count()
+                 published_count=JobPost.objects.filter(status=3).count()
              except JobPost.DoesNotExist:
                  published_count=0
              request.session['access'] = access

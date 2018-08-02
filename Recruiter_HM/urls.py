@@ -8,6 +8,8 @@ urlpatterns=[
     url(r'^submit',views.Send_jobpost,name="Send_jobpost"),
     url(r'^specific_post/(?P<id>(\d+))/',views.specific_post,name="specific_post"),
     url(r'^edit_jd/(?P<id>(\d+))/',views.edit_jd,name="edit_jd"),
+    url(r'^publish_jd/(?P<id>(\d+))/',views.publish_jd,name="publish_jd"),
+    url(r'^review_jd/(?P<id>(\d+))/',views.review_jd,name="review_jd"),
     url('',views.signin,name="signin")
     ]
 

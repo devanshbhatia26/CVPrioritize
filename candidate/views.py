@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render, reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Candidate
+from .models import Candidate, UploadFileModel, Application
 from .forms import EditDetails, UploadFile
 # Create your views here.
 
@@ -13,18 +13,19 @@ def index(request):
         form = UploadFile(request.POST, request.FILES)
         if form.is_valid():
             print "here1"
-            return HttpResponseRedirect(reverse('editdetails'))
-        else:
-            print "here2"
+            obj = form.save()
+            return HttpResponseRedirect(reverse('editdetails', args=(obj.id,)))
     else:
         print "here3"
         form = UploadFile()
     return render(request, 'candidate/index.html', {'form': form})
 
-def editdetails(request):
+def editdetails(request, objId):
     if request.method == 'POST':
         form = EditDetails(request.POST)
         if form.is_valid():
+            print "here"
+            obj = UploadFileModel.objects.get(id = objId)
             q = Candidate()
             name= form.cleaned_data['name']
             email= form.cleaned_data['email']
@@ -38,20 +39,12 @@ def editdetails(request):
             q.pincode=pincode
             q.experience=experience
             q.phone = phone
+            q.cv_path = obj.file
             q.save()
             return HttpResponseRedirect(reverse('index'))
     else:
-        # Retrieve data for cvscan
-
-        # data= {'name': q.name,
-        #         'email': q.email,
-        #         'address' : q.address,
-		# 'pincode' : q.pincode,
-		# 'experience' : q.experience,
-        #         'phone' : q.phone,
-        # }
-        # form = EditDetails(initial = data)
-
+        print objId
+        print UploadFileModel.objects.get(id = objId).file
         form = EditDetails()
     return render(request, 'candidate/editdetails.html', {'form': form})
 

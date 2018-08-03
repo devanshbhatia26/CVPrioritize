@@ -4,6 +4,9 @@ from __future__ import unicode_literals
 from django.db import models
 from django.core.validators import MinLengthValidator
 from Recruiter_HM.models import JobPost
+from django.utils import timezone
+from os.path import splitext, basename
+import os
 
 EXPERIENCE_CHOICES = (
     ('1-3','1-3'),
@@ -27,3 +30,13 @@ class Application(models.Model):
     candidateid= models.ForeignKey(Candidate, on_delete=models.CASCADE)
     jobid = models.ForeignKey(JobPost)
     score = models.IntegerField()
+
+class UploadFileModel(models.Model):
+
+    def unique_file_path(instance, filename):
+        instance.original_file_name = filename
+        base, ext = splitext(filename)
+        newname = "%s.%s" % (str(timezone.now()), ext)
+        return os.path.join('resume/',newname)
+
+    file = models.FileField(upload_to =unique_file_path)

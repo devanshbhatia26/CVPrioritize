@@ -3,8 +3,12 @@
 {% block content%}
     <div class="container-fluid">
         <div class="row align-items-center" style="min-height:85vh">
-            <div class="col-8 bg-light my-1 p-3">
-                <div class="text-center">About Us</div>
+            <div class="col-8 bg-light my-1 p-3 h-100", style="height:100px">
+                <div class="text-center">
+                    <p class="font-weight-bold";>Welcome to Hire Easy!</p>
+                    <p class="lead"; style="text-align:left; padding-left:40px; padding-right:40px">Looking for a suitable job? Well, you have arrived at the right place. Hire Easy is a platform which will provide you the simplest way to apply for a job. Just upload your resume and you are one click away from accomplishing your dreams. No need to ever go through the pains of scrolling down forever, waiting for the right job post to pop up. </p>
+                    <p class="lead"; style="text-align:left; padding-left:40px; padding-right:40px;">As hiring personnel, we understand your nightmares of shuffling through piles of applications and filtering out appropraite profiles. Forget the labourous task of finding the perfect match! Hire Easy is here to make your life easy. Simply fill in the job post details, make it public when desired and your nightmares will be taken care of. You will be able to view a prioritized list of candidate profiles based on your required skills. Rest assured, you are about to attain another level of satisfaction and ease.</p>
+                </div>
             </div>
             <div class="col-4 bg-light my-1 p-3">
                 <div class="text-center align-middle">
@@ -20,7 +24,13 @@
                                     <div class="modal-body text-center">
                                         <p>Upload Resume</p>
                                         {%csrf_token%}
-                                        {{form}}
+                                        {% for field in form %}
+                                            {{field}}
+                                            {{field.errors}}
+                                        {% endfor %}
+                                        {% if form.errors %}
+                                            <div class="text-danger mt-3">Unsupported File Extension</div>
+                                        {% endif %}
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-default">Upload</button>
@@ -33,4 +43,16 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block extra_js %}
+
+    {% if form.errors %}
+        <script>
+            $(function() {
+                $("#myModal").modal("show");
+            })
+        </script>
+    {% endif %}
+
 {% endblock %}

@@ -117,26 +117,42 @@ def review_jd(request,id):
     return redirect("/portal/dashboard")
 
 
+def success_jd(request,id):
+    job=JobPost.objects.get(id=id)
+    job.status=4
+    job.deleted_timestamp=timezone.now()
+    job.save()
+    return redirect("/portal/dashboard")
+
+
+def unsuccess_jd(request,id):
+    job=JobPost.objects.get(id=id)
+    job.status=5 
+    job.deleted_timestamp=timezone.now()
+    job.save()
+    return redirect("/portal/dashboard")
+
+
 def edit_jd(request,id):
     access=request.session.get('access')
     if(request.method== "POST"):
         form=JobPostForm(request.POST)
         if form.is_valid():
             job=JobPost.objects.get(id=id)
-            job.title=request.POST['title']
-            job.responsibilities=request.POST['responsibilities']
-            job.qualification=request.POST['qualification']
+            id=job.id
+            create=job.created_timestamp
+            job.delete()
             tags=list(request.POST['primary_skills'])
             for i in range(len(tags)):
                 if(tags[i]==request.POST['secondary_skills']):
                     return render(request,'edit_jd.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
-            job.status=1
-            job.primary_skills=request.POST['primary_skills']
-            job.overall_experience=request.Post['overall_experience']
-            job.secondary_skills=request.POST['secondary_skills']
-            job.tertiary_skills=request.POST['tertiary_skills']
-            job.updated_timestamp=timezone.now()
-            job.save()
+            u=form.save(commit=False)
+            u.id=id
+            u.status=1
+            u.created_timestamp=create
+            u.updated_timestamp=timezone.now()
+            u.save()
+            form.save_m2m()
             request.session['access']=access
             return redirect("/portal/dashboard")
 

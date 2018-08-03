@@ -4,13 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"> -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script> -->
 
 
 </head>
@@ -86,7 +88,7 @@
             {% elif access == "Hiring Manager" and job.status == 2 %} 
             <div class="col-sm-2">
                 <div class="container-fluid">
-                <button type="button"  class="btn btn-primary btn-block">Correct JD</button>
+                <a href='{% url 'edit_jd' job.id %}'><button type="button"  class="btn btn-primary btn-block">Correct JD</button></a>
                 </div></div>  
             {% elif access == "Recruiter" and job.status == 1 %}
             <div class="col-sm-2">
@@ -100,12 +102,36 @@
             {% elif access == "Hiring Manager" and job.status == 3 %}
             <div class="col-sm-2">
                     <div class="container-fluid">
-                    <button type="button"  class="btn btn-primary btn-block">Delete</button>
-                    </div></div> 
-            
-            {% else %}
-            {% endif %}
-            </div>
+                    <a href="#myModal" role="button" class="btn btn-large btn-primary" data-toggle="modal"> <button type="button"  class="btn btn-primary btn-block">Delete</button></a>
+                    
+                    <div id="myModal" class="modal">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                              
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                  <h4 class="modal-title">Delete JD</h4>
+                                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                
+                                <!-- Modal body -->
+                                <div class="modal-body">
+                                  Was The Job Post Hiring Successful or Unsuccessful?
+                                </div>
+                                
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                        <a href='{% url 'success_jd' job.id %}'> <button type="button" class="btn btn-danger" >Successful</button></a>
+                                        <a href='{% url 'unsuccess_jd' job.id %}'>   <button type="button" class="btn btn-danger" >Unsuccessful</button></a>
+                                </div>
+                                
+                              </div>
+                            </div>
+                          </div>
+                          </div>
+                          </div>
+                          {% endif %}
+                          
         </div>
     </div>
 

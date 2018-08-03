@@ -10,6 +10,8 @@ urlpatterns=[
     url(r'^edit_jd/(?P<id>(\d+))/',views.edit_jd,name="edit_jd"),
     url(r'^publish_jd/(?P<id>(\d+))/',views.publish_jd,name="publish_jd"),
     url(r'^review_jd/(?P<id>(\d+))/',views.review_jd,name="review_jd"),
+    url(r'^success_jd/(?P<id>(\d+))/',views.success_jd,name="success_jd"),
+    url(r'^unsuccess_jd/(?P<id>(\d+))/',views.unsuccess_jd,name="unsuccess_jd"),
     url('',views.signin,name="signin")
     ]
 

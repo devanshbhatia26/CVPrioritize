@@ -147,6 +147,8 @@
             <tbody id="myTable">
             {% for job in jobs %}
             <tr>
+            {% if access == "Recruiter" and job.status == 0 %}
+            {% else %}
             <td>{{ forloop.counter }}</td>
             <td><a href='{% url 'specific_post' job.id %}'>{{ job.title }}</a></td>
             <td>{{ job.status }}</td>
@@ -158,6 +160,7 @@
             <td class="table-light">Review</td>
             {% else %}
             <td class="table-light"></td>
+            {% endif %}
             {% endif %}
             </tr>
             {% endfor %}

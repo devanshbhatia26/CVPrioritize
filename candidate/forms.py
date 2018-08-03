@@ -18,8 +18,43 @@ class EditDetails(forms.Form):
     address=forms.CharField(min_length=20,max_length=2000,widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Address'}))
     pincode=forms.CharField(min_length=6,max_length=6,widget=forms.NumberInput(attrs={'class':'form-control','placeholder':'PIN'}))
     experience=forms.ChoiceField(choices=EXPERIENCE_CHOICES,widget=forms.Select(attrs={'class':'form-control'}))
-    Qualifiction=forms.CharField(min_length=20,max_length=2000,widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Qualification'}))
-    Skills=forms.MultiValueField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Skills'}))
+    qualifiction=forms.CharField(min_length=20,max_length=2000,widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Qualification'}))
+    skills=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Skills'}))
+
+    def clean_name(self):
+        if not self.cleaned_data['name']:
+            raise ValidatonError("Name cannot be empty")
+        return self.cleaned_data['name']
+    
+    def clean_email(self):
+        if not self.cleaned_data['email']:
+            raise ValidationError("Email cannot be empty")
+        return self.cleaned_data['email']
+    
+    def clean_phone(self):
+        if not self.cleaned_data['phone']:
+            raise ValidationError("Phone cannot be empty")
+        return self.cleaned_data['phone']
+    
+    def clean_address(self):
+        if not self.cleaned_data['address']:
+            raise ValidationError("Address cannot be empty")
+        return self.cleaned_data['address']
+    
+    def clean_pincode(self):
+        if not self.cleaned_data['pincode']:
+            raise ValidationError("Pincode cannot be empty")
+        return self.cleaned_data['pincode']
+    
+    def clean_qualification(self):
+        if not self.cleaned_data['qualification']:
+            raise ValidationError("Qualification cannot be empty")
+        return self.cleaned_data["qualification"]
+    
+    def clean_skills(self):
+        if not self.cleaned_data['skills']:
+            raise ValidationError("Skills cannot be empty")
+        return self.cleaned_data['skills']
 
 class UploadFile(ModelForm):
     class Meta:

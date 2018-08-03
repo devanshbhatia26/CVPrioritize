@@ -4,6 +4,7 @@
 
 <div class="container p-3">
     <form method="POST">
+        {{form.errors}}
         {% csrf_token %}
         {% for field in form %}
             <div class="row w-100">

@@ -5,6 +5,7 @@ from django.shortcuts import render, reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Candidate, UploadFileModel, Application
 from .forms import EditDetails, UploadFile
+from django.utils import timezone
 # Create your views here.
 
 
@@ -12,7 +13,7 @@ def index(request):
     if (request.method == 'POST'):
         form = UploadFile(request.POST, request.FILES)
         if form.is_valid():
-            print "here1"
+            print "here"
             obj = form.save()
             return HttpResponseRedirect(reverse('editdetails', args=(obj.id,)))
     else:
@@ -24,24 +25,27 @@ def editdetails(request, objId):
     if request.method == 'POST':
         form = EditDetails(request.POST)
         if form.is_valid():
-            print "here"
+            print "validated"
             obj = UploadFileModel.objects.get(id = objId)
             q = Candidate()
-            name= form.cleaned_data['name']
-            email= form.cleaned_data['email']
-            address= form.cleaned_data['address']
-            pincode= form.cleaned_data['pincode']
-            experience= form.cleaned_data['experience']
-            phone= form.cleaned_data['phone']
-            q.name=name
-            q.email=email
-            q.address=address
-            q.pincode=pincode
-            q.experience=experience
+            name = request.POST['name']
+            email = request.POST['email']
+            address = request.POST['address']
+            pincode = request.POST['pincode']
+            experience = request.POST['experience']
+            phone = request.POST['phone']
+            q.name = name
+            q.email = email
+            q.address = address
+            q.pincode = pincode
+            q.experience = experience
             q.phone = phone
             q.cv_path = obj.file
+            q.created_timestamp = timezone.now()
             q.save()
-            return HttpResponseRedirect(reverse('index'))
+            return HttpResponseRedirect(reverse('home'))
+        else:
+            print "Not Validated"
     else:
         print objId
         print UploadFileModel.objects.get(id = objId).file

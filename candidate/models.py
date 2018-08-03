@@ -33,10 +33,10 @@ class Application(models.Model):
 
 class UploadFileModel(models.Model):
 
-    def unique_file_path(instance, filename):
-        instance.original_file_name = filename
-        base, ext = splitext(filename)
-        newname = "%s.%s" % (str(timezone.now()), ext)
-        return os.path.join('resume/',newname)
+    # def unique_file_path(self, instance, filename):
+    #     instance.original_file_name = filename
+    #     base, ext = splitext(filename)
+    #     newname = "%s.%s" % (str(timezone.now()), ext)
+    #     return os.path.join('resume/',newname)
 
-    file = models.FileField(upload_to =unique_file_path)
+    file = models.FileField(upload_to = os.path.join('resume/',"%s.pdf" % (str(timezone.now()))))

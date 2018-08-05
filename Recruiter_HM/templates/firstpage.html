@@ -14,6 +14,7 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="{% static "vendor/bootstrap/css/bootstrap.min.css" %} "rel="stylesheet">
+   
 
     <!-- MetisMenu CSS -->
     <link href="{% static "vendor/metisMenu/metisMenu.min.css" %}" rel="stylesheet">
@@ -26,6 +27,10 @@
 
     <!-- Custom Fonts -->
     <link href="{% static "vendor/font-awesome/css/font-awesome.min.css" %}" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,7 +38,7 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-
+  
 </head>
 
 <body>
@@ -226,47 +231,32 @@
       </div>
             {% endif %}
             <!-- /.row -->
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> Area Chart Example
-                            <div class="pull-right">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
-                                        Actions
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu pull-right" role="menu">
-                                        <li><a href="#">Action</a>
-                                        </li>
-                                        <li><a href="#">Another action</a>
-                                        </li>
-                                        <li><a href="#">Something else here</a>
-                                        </li>
-                                        <li class="divider"></li>
-                                        <li><a href="#">Separated link</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <div id="morris-area-chart"></div>
-                        </div>
-                        <!-- /.panel-body -->
-                    </div>
-                    <!-- /.panel -->
-
-
-
-
-
-                </div>
-                <!-- /.col-lg-4 -->
-            </div>
-            <!-- /.row -->
+            <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+          
+          <script>
+                Highcharts.chart('container', {
+                    chart: {
+            type: 'column'
+        },
+        title: {
+            text: 'JOB PROFILE TRENDS'
+        },
+        xAxis: {
+            categories:{{ categories|safe }}
+        },
+        series: [{
+            name: 'Successful Closed',
+            data: {{ succesful_closed }},
+            color: 'green'
+        }, {
+            name: 'Published',
+            data: {{ published }},
+            color: 'red'
+        }]
+});
+            
+                </script>
+            
         </div>
         <!-- /#page-wrapper -->
 
@@ -274,6 +264,7 @@
     <!-- /#wrapper -->
 
     <!-- jQuery -->
+
     <script src="{%static "vendor/jquery/jquery.min.js"  %}"></script>
 
     <!-- Bootstrap Core JavaScript -->

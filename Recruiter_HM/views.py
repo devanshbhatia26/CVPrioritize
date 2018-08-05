@@ -5,8 +5,11 @@ from django.shortcuts import render,redirect,render_to_response
 from .forms import JobPostForm,LoginForm
 from .models import JobPost,Profile
 from django import forms
+from itertools import chain
 from django.utils import timezone
 from taggit.models import Tag
+from django.core import serializers
+import json
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,login,logout
 
@@ -133,6 +136,31 @@ def unsuccess_jd(request,id):
     return redirect("/portal/dashboard")
 
 
+def match(request):
+    job=list(JobPost.objects.all().values_list('id'))
+   
+    job=list(chain(*job))
+    print(job)
+    tag=Tag.objects.filter(jobpost__in=job).values_list('jobpost')
+    tag1=Tag.objects.filter(jobpost__in=job).values_list('name')
+    tag1=list(chain(*tag1))
+    print(tag1)
+    jm=JobPost.objects.all()
+
+  
+   
+    print(tag)
+    tf=Tag.objects.all()
+    xc=[j for j in range(len(tag))]
+    print(xc)
+    data = serializers.serialize('json',jm)
+    dr=serializers.serialize('json',tf)
+    print(dr)
+    print(data)
+  
+
+
+
 def edit_jd(request,id):
     access=request.session.get('access')
     if(request.method== "POST"):
@@ -140,7 +168,9 @@ def edit_jd(request,id):
         if form.is_valid():
             job=JobPost.objects.get(id=id)
             id=job.id
+            tag=Tag.objects.filter(jobpost=id)
             create=job.created_timestamp
+            tag.delete()
             job.delete()
             tags=list(request.POST['primary_skills'])
             for i in range(len(tags)):
@@ -185,7 +215,37 @@ def dashboard(request):
                 published_count=0
 
             request.session['access'] = access
-            data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Recieved','Requested':'Requested','Published':'Published','access':access}
+            titles=list(JobPost.objects.all().values_list('title'))
+            titles=list(chain(*titles))
+            print(titles)
+            categories = list()
+            succesful_closed = list()
+            published = list()
+            for ti in titles:
+                categories.append(ti)
+                try:
+                    c=JobPost.objects.filter(title=ti).filter(status=3).count()
+                    published.append(c)
+                    
+
+                except JobPost.DoesNotExist:
+                    c=0
+                    published.append(c)
+            
+                try:
+                    c1=JobPost.objects.filter(title=ti).filter(status=4).count()
+                    succesful_closed.append(c1)
+                    
+
+                except JobPost.DoesNotExist:
+                    c1=0
+                    succesful_closed.append(c1)  
+              
+                
+
+            data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Recieved','Requested':'Requested','Published':'Published','access':access,  'categories': json.dumps(categories),
+        'succesful_closed': json.dumps(succesful_closed),
+        'published': json.dumps(published)}
             
         else:
              access=request.session.get('access')
@@ -204,9 +264,40 @@ def dashboard(request):
              except JobPost.DoesNotExist:
                  published_count=0
              request.session['access'] = access
-             data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Sent','Requested':'Pending','Published':'Published','access':access}
-        return render(request,'firstpage.html',data_dict)
-    
+
+             titles=list(JobPost.objects.all().values_list('title'))
+             titles=list(chain(*titles))
+             print(titles)
+             categories = list()
+             succesful_closed = list()
+             published = list()
+             for ti in titles:
+                 categories.append(ti)
+                 try:
+                     c=JobPost.objects.filter(title=ti).filter(status=3).count()
+                     published.append(c)
+                    
+
+                 except JobPost.DoesNotExist:
+                     c=0
+                     published.append(c)
+            
+                 try:
+                     c1=JobPost.objects.filter(title=ti).filter(status=4).count()
+                     succesful_closed.append(c1)
+                    
+                 except JobPost.DoesNotExist:
+                     c1=0
+                     succesful_closed.append(c1)  
+              
+                
+
+             data_dict = {'re_c': recieved_count,'req_c':requested_count,'pub_c':published_count,'Received':'Sent','Requested':'Pending','Published':'Published','access':access,  'categories': json.dumps(categories),
+        'succesful_closed': json.dumps(succesful_closed),
+        'published': json.dumps(published)}
+
+        return render(request,'firstpage.html',data_dict)    
+         
     else:
 
         if request.session.get('access')=='Hiring Manager':

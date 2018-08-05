@@ -26,6 +26,9 @@ class JobPost(models.Model):
     created_timestamp=models.DateTimeField(null=True,blank=True)
     updated_timestamp=models.DateTimeField(null=True, blank=True)
     deleted_timestamp=models.DateTimeField(null=True, blank=True)
+
+    def __int__(self):
+        return self.id
     
 
 

@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 LOGIN_URL='/portal'
+LOGOUT_URL = '/portal'
 
 
 INSTALLED_APPS = [

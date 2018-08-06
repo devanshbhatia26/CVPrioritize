@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 from django.shortcuts import render,redirect,render_to_response
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from .forms import JobPostForm,LoginForm
 from .models import JobPost,Profile
 from django import forms
@@ -17,26 +19,7 @@ from django.contrib.auth import authenticate,login,logout
 
 
 
-def Send_jobpost(request):
-    if request.method=="POST":
-        access=request.session.get('access')
-        form=JobPostForm(request.POST)
-        if form.is_valid():
-            tags=list(request.POST['primary_skills'])
-            print(tags)
-            for i in range(len(tags)):
-                if(tags[i]==request.POST['secondary_skills']):
-                    return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
-            u=form.save(commit=False)
-            u.created_timestamp=timezone.now()
-            u.status=1
-            u.save()
-            form.save_m2m()
-            request.session['access']=access
-            return redirect("/portal/dashboard")
-
-
-
+@login_required
 def job_post(request):
     if request.method=="POST":
          access=request.session.get('access')
@@ -48,14 +31,11 @@ def job_post(request):
                     return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
              u=form.save(commit=False)
              u.created_timestamp=timezone.now()
-             u.status=0
              u.save()
              form.save_m2m()
              request.session['access']=access
              return redirect("/portal/dashboard")
-         
          else:
-             form=JobPostForm() 
              return render(request,'job_post.html',{'form':form,'messages':'The Minimum Length for title is 3 characters,for Qualification field is 30 characters and for responsibilities field is 30 characters'})
 
              
@@ -63,6 +43,8 @@ def job_post(request):
     return render(request,'job_post.html',{'form':form})
 
 
+
+@login_required
 def job_post_details(request):
     k1=''
     k2=''
@@ -102,6 +84,7 @@ def job_post_details(request):
 
 
 
+@login_required
 def specific_post(request,id):
     access=request.session.get('access')
     u=JobPost.objects.get(id=id)
@@ -110,6 +93,8 @@ def specific_post(request,id):
 
 
 
+
+@login_required
 def publish_jd(request,id):
     job=JobPost.objects.get(id=id)
     job.status=3
@@ -117,13 +102,9 @@ def publish_jd(request,id):
     return redirect("/portal/dashboard")
 
 
-def review_jd(request,id):
-    job=JobPost.objects.get(id=id)
-    job.status=2
-    job.save()
-    return redirect("/portal/dashboard")
 
 
+@login_required
 def success_jd(request,id):
     job=JobPost.objects.get(id=id)
     job.status=4
@@ -132,6 +113,8 @@ def success_jd(request,id):
     return redirect("/portal/dashboard")
 
 
+
+@login_required
 def unsuccess_jd(request,id):
     job=JobPost.objects.get(id=id)
     job.status=5 
@@ -140,9 +123,10 @@ def unsuccess_jd(request,id):
     return redirect("/portal/dashboard")
 
 
+
+
 def match(request):
-    job=list(JobPost.objects.all().values_list('id'))
-   
+    job=list(JobPost.objects.all().values_list('id'))   
     job=list(chain(*job))
     print(job)
     tag=Tag.objects.filter(jobpost__in=job).values_list('jobpost')
@@ -150,9 +134,6 @@ def match(request):
     tag1=list(chain(*tag1))
     print(tag1)
     jm=JobPost.objects.all()
-
-  
-   
     print(tag)
     tf=Tag.objects.all()
     xc=[j for j in range(len(tag))]
@@ -165,6 +146,50 @@ def match(request):
 
 
 
+
+@login_required
+def review(request,id):
+    access = request.session.get('access')
+    if (request.method == "POST"):
+        form = JobPostForm(request.POST)
+        if form.is_valid():
+            job = JobPost.objects.get(id=id)
+            id = job.id
+            create = job.created_timestamp
+            job.delete()
+            tags = list(request.POST['primary_skills'])
+            for i in range(len(tags)):
+                if (tags[i] == request.POST['secondary_skills']):
+                    return render(request, 'edit_jd.html',
+                                  {'form': form, 'messages': 'You cant have same primary and secondary skills'})
+            u = form.save(commit=False)
+            u.id = id
+            u.created_timestamp=create
+            u.status = 2
+            u.save()
+            form.save_m2m()
+
+            request.session['access'] = access
+            return redirect("/portal/dashboard")
+
+    job = JobPost.objects.get(id=id)
+
+    initial = {'title': job.title, 'responsibilities': job.responsibilities, 'qualification': job.qualification,
+               'overall_experience': job.overall_experience, 'secondary_skills': job.secondary_skills,
+               'tertiary_skills': job.tertiary_skills,}
+    form = JobPostForm(initial)
+    return render(request, 'edit_jd.html', {'form': form})
+
+
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse("signin"))
+
+
+
+@login_required
 def edit_jd(request,id):
     access=request.session.get('access')
     if(request.method== "POST"):
@@ -203,6 +228,9 @@ def edit_jd(request,id):
 
 
 
+
+
+@login_required
 def dashboard(request):
     jobs=JobPost.objects.all()
     if jobs:
@@ -331,6 +359,10 @@ def dashboard(request):
 
 
 def signin(request):
+    if request.user.is_authenticated:
+        return redirect("/portal/dashboard")
+
+    else:
         if(request.method=="POST"):
             form=LoginForm(request.POST)
             if form.is_valid():

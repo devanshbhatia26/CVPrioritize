@@ -158,6 +158,8 @@
             <td class="table-light">Correct</td>
             {% elif job.status == 1 and access == "Recruiter" %}
             <td class="table-light">Review</td>
+            {% elif job.status == 3 and access == "Hiring Manager" %}
+            <td class="table-light">Delete</td>
             {% else %}
             <td class="table-light"></td>
             {% endif %}

@@ -38,13 +38,13 @@ class ForgetPassword(forms.Form):
             raise forms.ValidationError('Password Does Not Matach')
 
 class JobPostForm(forms.ModelForm):
+    status = forms.IntegerField(widget=forms.HiddenInput())
+
     class Meta:
         model=JobPost
-        fields=['title','responsibilities','qualification','overall_experience','primary_skills','secondary_skills','tertiary_skills']
+        fields=['title','responsibilities','qualification','overall_experience','primary_skills','secondary_skills','tertiary_skills','status']
     
-    def clean_responsibilities(self):
-        responsibilities = self.cleaned_data.get('responsibiilities')
-        
+   
       
         
 

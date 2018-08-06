@@ -75,7 +75,7 @@
                         <li><a href="#"><i class="fa fa-gear fa-fw"></i> Change Password</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        <li><a href='{% url 'logout_view' %}'><i class="fa fa-sign-out fa-fw"></i> Logout</a>
                         </li>
                     </ul>
                     <!-- /.dropdown-user -->
@@ -173,7 +173,7 @@
                                 </div>
                             </div>
                         </div>
-                        <a href='{% url 'job_post' %}'>
+                        <a href="{% url 'job_post' %}">
                             <div class="panel-footer">
                                 <span class="pull-left">Add</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

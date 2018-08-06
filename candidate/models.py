@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import datetime
+
 from django.db import models
 from django.core.validators import MinLengthValidator
 from Recruiter_HM.models import JobPost
@@ -26,10 +28,12 @@ class Candidate(models.Model):
     cv_path = models.FileField()
     created_timestamp = models.DateField()
 
+
 class Application(models.Model):
     candidateid= models.ForeignKey(Candidate, on_delete=models.CASCADE)
     jobid = models.ForeignKey(JobPost)
     score = models.IntegerField()
+
 
 class UploadFileModel(models.Model):
 
@@ -39,4 +43,5 @@ class UploadFileModel(models.Model):
     #     newname = "%s.%s" % (str(timezone.now()), ext)
     #     return os.path.join('resume/',newname)
 
-    file = models.FileField(upload_to = os.path.join('resume/',"%s.pdf" % (str(timezone.now()))))
+    file = models.FileField(upload_to="resume/")
+

@@ -53,6 +53,10 @@ def job_post(request):
              form.save_m2m()
              request.session['access']=access
              return redirect("/portal/dashboard")
+         
+         else:
+             form=JobPostForm() 
+             return render(request,'job_post.html',{'form':form,'messages':'The Minimum Length for title is 3 characters,for Qualification field is 30 characters and for responsibilities field is 30 characters'})
 
              
     form=JobPostForm() 
@@ -186,6 +190,10 @@ def edit_jd(request,id):
             request.session['access']=access
             return redirect("/portal/dashboard")
 
+        else:
+            form=JobPostForm() 
+            return render(request,'job_post.html',{'form':form,'messages':'The Minimum Length for title is 3 characters,for Qualification field is 30 characters and for responsibilities field is 30 characters'})
+        
     
     job=JobPost.objects.get(id=id)
     
@@ -328,8 +336,11 @@ def signin(request):
             if form.is_valid():
                 AID=form.cleaned_data['AID']
                 password=form.cleaned_data['Password']
-                u=Profile.objects.get(AID=AID)
-                print u.user
+                try:
+                    u=Profile.objects.get(AID=AID)
+                except Profile.DoesNotExist:
+                    form=LoginForm()
+                    return render(request,'login.html',{'form':form,'messages':'Username does not exist'})
                 username=str(u.user)
                 users=authenticate(request,username=username,password=password)
                 if users is not None:
@@ -344,7 +355,9 @@ def signin(request):
                         request.session['access'] = access
                         return redirect("/portal/dashboard")
                 else:
-                    messages.error(request,'Incorrect Username or Password')
+                    form=LoginForm()
+                    return render(request,'login.html',{'form':form,'messages':'Incorrect Password'})
+                    
                     
         else:
             form=LoginForm()

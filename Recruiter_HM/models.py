@@ -16,7 +16,7 @@ EXPERIENCE_CHOICES = (
 )
 class JobPost(models.Model):
     title= models.CharField(max_length=100,validators=[MinLengthValidator(3)])
-    responsibilities = models.TextField(max_length=2000,validators=[MinLengthValidator(30)])
+    responsibilities = models.CharField(max_length=2000,validators=[MinLengthValidator(30)])
     qualification = models.TextField(max_length=2000,validators=[MinLengthValidator(30)])
     overall_experience = models.CharField(max_length=6, choices=EXPERIENCE_CHOICES, default='1-3')
     primary_skills=TaggableManager(help_text='comma separted tags')

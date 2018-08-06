@@ -2,6 +2,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns=[
+    
     url(r'^job_posts',views.job_post,name="job_post"),
     url(r'^match',views.match,name="match"),
     url(r'^dashboard',views.dashboard,name="dashboard"),
@@ -14,5 +15,4 @@ urlpatterns=[
     url(r'^success_jd/(?P<id>(\d+))/',views.success_jd,name="success_jd"),
     url(r'^unsuccess_jd/(?P<id>(\d+))/',views.unsuccess_jd,name="unsuccess_jd"),
     url('',views.signin,name="signin")
-    ]
-
+]    

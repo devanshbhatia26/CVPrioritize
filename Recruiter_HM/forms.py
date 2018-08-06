@@ -41,6 +41,11 @@ class JobPostForm(forms.ModelForm):
     class Meta:
         model=JobPost
         fields=['title','responsibilities','qualification','overall_experience','primary_skills','secondary_skills','tertiary_skills']
+    
+    def clean_responsibilities(self):
+        responsibilities = self.cleaned_data.get('responsibiilities')
+        
+      
         
 
 class Candidate(forms.Form):

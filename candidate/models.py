@@ -24,6 +24,7 @@ class Candidate(models.Model):
     address= models.TextField(max_length=100, validators=[MinLengthValidator(3)])
     pincode = models.IntegerField()
     experience = models.CharField(max_length=6, choices=EXPERIENCE_CHOICES, default='1-3')
+    skills = models.CharField(max_length=100, validators=[MinLengthValidator(3)])
     phone= models.IntegerField()
     cv_path = models.FileField()
     created_timestamp = models.DateField()

@@ -7,3 +7,4 @@ numpy==1.11.3
 click==6.6
 selenium==3.0.2
 openpyxl==2.4.1
+gunicorn==19.9.0

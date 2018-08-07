@@ -42,7 +42,7 @@ class JobPostForm(forms.ModelForm):
 
     class Meta:
         model=JobPost
-        fields=['title','responsibilities','qualification','overall_experience','primary_skills','secondary_skills','tertiary_skills','status']
+        fields=['title','responsibilities','qualification','team','people','overall_experience','primary_skills','secondary_skills','tertiary_skills','status']
     
    
       

@@ -20,6 +20,18 @@
           });
         };
       </script>    
+
+<script type="text/javascript">
+    function printChecked(){
+        var items=document.getElementsByName('status');
+        var status="";
+        for(var i=0; i<items.length; i++){
+            if(items[i].type=='checkbox' && items[i].checked==true)
+                status+=items[i].value+",";
+        }
+        window.location='http://localhost:8000/portal/job_post_details?status=' + status
+    }			
+</script>
 </head>
 
 
@@ -42,42 +54,42 @@
 		            <div class="filter-content">
 			            <div class="card-body">
                         {% if access == 'Hiring Manager' %}
-                      
+                        <form id="form">
 			            <label class="form-check">
-			            <input class="form-check-input" type="radio" name="exampleRadio"  {{k1}}>
+			            <input class="form-check-input" type="checkbox" name="status" value="0"  {{k1}}>
 			                <span class="form-check-label">
 			                Draft
 			                </span>
                         </label>
 			        <label class="form-check">
-			        <input class="form-check-input" type="radio" name="exampleRadio" {{k2}}>
+			        <input class="form-check-input" type="checkbox" name="status" value="1" {{k2}}>
 			        <span class="form-check-label">
 			        {{Requested}}
 			        </span>
 			        </label>
 			        <label class="form-check">
-			        <input class="form-check-input" type="radio" name="exampleRadio" {{k3}}>
+			        <input class="form-check-input" type="checkbox" name="status" value="2" {{k3}}>
 			        <span class="form-check-label">
 			        {{Received}}
 			        </span>
 			        </label>
 
                     <label class="form-check">
-			        <input class="form-check-input" type="radio" name="exampleRadio" {{k4}}>
+			        <input class="form-check-input" type="checkbox" name="status" value="3" {{k4}}>
 			        <span class="form-check-label">
 			        Published
 			        </span>
 			        </label>
 
                     <label class="form-check">
-			        <input class="form-check-input" type="radio" name="exampleRadio" {{k5}}>
+			        <input class="form-check-input" type="checkbox" name="status" value="4" {{k5}}>
 			        <span class="form-check-label">
                     Successfully Closed
 			        </span>
 			        </label>
 
                     <label class="form-check">
-			        <input class="form-check-input" type="radio" name="exampleRadio" {{k6}}>
+			        <input class="form-check-input" type="checkbox" name="status" value="5" {{k6}}>
 			        <span class="form-check-label">
 			        Unsuccessfully Closed
 			        </span>
@@ -86,7 +98,7 @@
 
                    
                         <label class="form-check">
-                     <input class="form-check-input" type="radio" name="exampleRadio" id=1  {{k2}}></a>
+                     <input class="form-check-input" type="checkbox" name="status" value="1" {{k2}}></a>
                        <span class="form-check-label">
                         Pending
                         </span>
@@ -95,7 +107,7 @@
 
                     
                         <label class="form-check">
-                        <input class="form-check-input" type="radio" name="exampleRadio" id='2' onclick='UpdatePKFunction(2)' {{k3}}>
+                        <input class="form-check-input" type="checkbox" name="status" value="2" {{k3}}>
                        <span class="form-check-label">
                         Sent
                         </span>
@@ -103,26 +115,28 @@
                       
     
                         <label class="form-check">
-                        <a href="http://localhost:8000/portal/job_post_details/3/"> <input class="form-check-input" type="radio" name="exampleRadio" id='3' {{k4}}></a>
+                        <input class="form-check-input" type="checkbox" name="status" value="3" {{k4}}>
                         <span class="form-check-label">
                         Published
                         </span>
                         </label>
     
                         <label class="form-check">
-                                <a href="http://localhost:8000/portal/job_post_details/4/"> <input class="form-check-input" type="radio" name="exampleRadio" id=4 {{k5}}></a>
+                       <input class="form-check-input" type="checkbox" name="status" value="4" {{k5}}>
                         <span class="form-check-label">
                         Successfully Closed
                         </span>
                         </label>
     
                         <label class="form-check">
-                        <a href="http://localhost:8000/portal/job_post_details/5/"> <input class="form-check-input" type="radio" name="exampleRadio" id=5 {{k6}}></a>
+                        <input class="form-check-input" type="checkbox" name="status" value="5" {{k6}}></a>
                         <span class="form-check-label">
                         Unsuccessfully Closed
                         </span>
                         </label>
                         {% endif %}
+                        <input type="button" onclick='printChecked()' name="Button1" value="Apply Filter">
+                    </form>
 
                         </div> <!-- card-body.// -->
 		        </div>

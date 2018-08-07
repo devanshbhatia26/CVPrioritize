@@ -53,25 +53,38 @@ def job_post_details(request):
     k5=''
     k6=''
     status=request.GET.get('status')
-    print(status)
+    stat = status.split(',')
+    print(stat)
+    stats=[]
     access=request.session.get('access')
-    
+    if len(stat)==1:
+        for i in range(len(stat)):
+            val=int(stat[i])
+            stats.append(val)
+    else:
+        for i in range(len(stat)-1):
+            val = int(stat[i])
+            stats.append(val)
+    print(stats)
+
+
     if(status == '6'):
         jobs=JobPost.objects.all()
     else:
-        jobs=JobPost.objects.filter(status=status)
-        if(status == '0'):
-            k1="checked"
-        elif(status == '1'):
-            k2="checked"
-        elif(status == '2'):
-            k3="checked"
-        elif(status== '3'):
-            k4="checked"
-        elif(status== '4'):
-            k5="checked"
-        elif(status=='5'):
-            k6="checked"
+        jobs=JobPost.objects.filter(status__in=stats)
+        for i in range(len(stats)):
+            if(stats[i] == 0):
+                k1="checked"
+            elif(stats[i] == 1):
+                k2="checked"
+            elif(stats[i] == 2):
+                k3="checked"
+            elif(stats[i] == 3):
+                k4="checked"
+            elif(stats[i] == 4):
+                k5="checked"
+            elif(stats[i] == 5):
+                k6="checked"
         else:
             pass
         
@@ -148,41 +161,6 @@ def match(request):
 
 
 @login_required
-def review(request,id):
-    access = request.session.get('access')
-    if (request.method == "POST"):
-        form = JobPostForm(request.POST)
-        if form.is_valid():
-            job = JobPost.objects.get(id=id)
-            id = job.id
-            create = job.created_timestamp
-            job.delete()
-            tags = list(request.POST['primary_skills'])
-            for i in range(len(tags)):
-                if (tags[i] == request.POST['secondary_skills']):
-                    return render(request, 'edit_jd.html',
-                                  {'form': form, 'messages': 'You cant have same primary and secondary skills'})
-            u = form.save(commit=False)
-            u.id = id
-            u.created_timestamp=create
-            u.status = 2
-            u.save()
-            form.save_m2m()
-
-            request.session['access'] = access
-            return redirect("/portal/dashboard")
-
-    job = JobPost.objects.get(id=id)
-
-    initial = {'title': job.title, 'responsibilities': job.responsibilities, 'qualification': job.qualification,
-               'overall_experience': job.overall_experience, 'secondary_skills': job.secondary_skills,
-               'tertiary_skills': job.tertiary_skills,}
-    form = JobPostForm(initial)
-    return render(request, 'edit_jd.html', {'form': form})
-
-
-
-@login_required
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("signin"))
@@ -207,7 +185,6 @@ def edit_jd(request,id):
                     return render(request,'edit_jd.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
             u=form.save(commit=False)
             u.id=id
-            u.status=1
             u.created_timestamp=create
             u.updated_timestamp=timezone.now()
             u.save()
@@ -216,15 +193,15 @@ def edit_jd(request,id):
             return redirect("/portal/dashboard")
 
         else:
-            form=JobPostForm() 
-            return render(request,'job_post.html',{'form':form,'messages':'The Minimum Length for title is 3 characters,for Qualification field is 30 characters and for responsibilities field is 30 characters'})
+            print(form.errors)
+            return render(request,'edit_jd.html',{'form':form,'messages':'The Minimum Length for title is 3 characters,for Qualification field is 30 characters and for responsibilities field is 30 characters'})
         
     
     job=JobPost.objects.get(id=id)
     
-    initial={'title':job.title,'responsibilities':job.responsibilities,'qualification':job.qualification,'overall_experience': job.overall_experience,'secondary_skills':job.secondary_skills,'tertiary_skills':job.tertiary_skills}
+    initial={'title':job.title,'responsibilities':job.responsibilities,'qualification':job.qualification,'overall_experience': job.overall_experience,'secondary_skills':job.secondary_skills,'tertiary_skills':job.tertiary_skills,'team':job.team,'people':job.people}
     form=JobPostForm(initial)
-    return render(request,'edit_jd.html',{'form':form})
+    return render(request,'edit_jd.html',{'form':form,'access':access,'id':id})
 
 
 

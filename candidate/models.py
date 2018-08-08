@@ -35,9 +35,9 @@ class Candidate(models.Model):
 class Application(models.Model):
     candidateid= models.ForeignKey(Candidate, on_delete=models.CASCADE)
     jobid = models.ForeignKey(JobPost)
-    score = models.IntegerField()
+    score = models.FloatField()
 
-    
+
 class UploadFileModel(models.Model):
 
     # def unique_file_path(self, instance, filename):

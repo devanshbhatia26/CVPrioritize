@@ -13,15 +13,22 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
 <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  
 
 
 </head>
 <body>
 
 
-<div >
+<div>
 
         <div class="container-fluid">
+            {% if messages %}
+            <div class="row">
+                <h2>{{messages}}</h2>
+            </div>
+            {% else %}
    
              <div class="row">
    
@@ -56,8 +63,8 @@
                <td>{{ li.candidateid.id }}</td>
                <td>{{ li.jobid.id }}</td>
                <td>{{li.candidateid.name}}</td>
-               <td>{{ li.score }}</td>
-               <td></td>
+               <td>{{li.score}}</td>
+               <td><a href="{{li.candidateid.cv_path.url}}" target="_blank"><i class="fa fa-link" aria-hidden="true"></i></a></td>
 {#               <td><a href="{{li.cv_path}}" target="_blank">{{li.cv_path}}</a></td>#}
                </tr>
                {% endfor %}
@@ -72,7 +79,7 @@
                <div class="container-fluid">
                    <ul class="pagination justify-content-center">
                    <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-0                     <li class="page-item"><a class="page-link" href="#">1</a></li>
+                   <li class="page-item"><a class="page-link" href="#">1</a></li>
                    <li class="page-item"><a class="page-link" href="#">2</a></li>
                    <li class="page-item"><a class="page-link" href="#">3</a></li>
                    <li class="page-item"><a class="page-link" href="#">Next</a></li>
@@ -93,7 +100,7 @@
            </script>
    
          </div>
-   
+   {% endif %}
      </div>
    <br><br>
    

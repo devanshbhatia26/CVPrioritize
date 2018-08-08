@@ -20,8 +20,17 @@ from django.contrib.auth import authenticate,login,logout
 @login_required
 def show_jd(request,id):
     job=JobPost.objects.get(pk=id)
-    main_list=job.application_set.all()
-    return render(request,'show_jd.html',{'main_list':main_list})
+    job_status=JobPost.objects.get(pk=id)
+    print(job_status.status)
+    if(job_status.status == 3):
+        main_list=job.application_set.filter(score__gt=77).filter()
+        return render(request,'show_jd.html',{'main_list':main_list})
+
+    else:
+        return render(request,'show_jd.html',{'messages': 'This Job Post Has Been Closed'})
+
+    
+
 
 
 @login_required
@@ -30,12 +39,14 @@ def job_post(request):
          access=request.session.get('access')
          form=JobPostForm(request.POST)
          if form.is_valid():
-             tags= request.POST['primary_skills'].split(',')
+             tags= [i.lower().strip() for i in request.POST['primary_skills'].split(',')]
+             sec_tags = [ i.lower().strip() for i in request.POST['secondary_skills'].split(',')]
+             tert_tags = [ i.lower().strip() for i in request.POST['tertiary_skills'].split(',')]
              for i in range(len(tags)):
-                if(tags[i] in request.POST['secondary_skills'].split(',')):
+                if(tags[i] in sec_tags ):
                     return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
                     
-                if(tags[i] in request.POST['tertiary_skills'].split(',')):
+                if(tags[i] in tert_tags):
                     return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and tertiary skills'})
              u=form.save(commit=False)
              u.created_timestamp=timezone.now()
@@ -193,7 +204,7 @@ def edit_jd(request,id):
     
     job=JobPost.objects.get(id=id)
     
-    initial={'title':job.title,'responsibilities':job.responsibilities,'qualification':job.qualification,'overall_experience': job.overall_experience,'secondary_skills':job.secondary_skills,'tertiary_skills':job.tertiary_skills,'team':job.team,'people':job.people}
+    initial={'title':job.title,'responsibilities':job.responsibilities,'qualification':job.qualification,'additional_qualification':job.additional_qualification,'overall_experience': job.overall_experience,'primary_skills':job.primary_skills,'secondary_skills':job.secondary_skills,'tertiary_skills':job.tertiary_skills,'team':job.team,'people':job.people}
     form=JobPostForm(initial)
     return render(request,'edit_jd.html',{'form':form,'access':access,'id':id})
 
@@ -237,7 +248,7 @@ def dashboard(request):
                 categories.append(ti)  
             for spec in specific:
                 try:
-                    c=JobPost.objects.get(id=spec).filter(status=3).count()
+                    c=JobPost.objects.filter(id=spec).filter(status=3).count()
                     published.append(c)
                     
 
@@ -386,3 +397,9 @@ def signin(request):
         else:
             form=LoginForm()
             return render(request,'login.html',{'form':form})
+
+@login_required
+def show_resume(request, file):
+    fsock = open("../../media/"+file, 'r')
+    response = HttpResponse(fsock, mimetype='application/pdf')
+    return response

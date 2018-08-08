@@ -38,15 +38,15 @@ class ForgetPassword(forms.Form):
             raise forms.ValidationError('Password Does Not Matach')
 
 class JobPostForm(forms.ModelForm):
-    status = forms.IntegerField(widget=forms.HiddenInput())
+    status = forms.IntegerField(widget=forms.HiddenInput(),label='')
     primary_skills=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Enter skills separted by comma'}))
-    tertiary_skills=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Enter skills separted by comma'}))
-    secondary_skills=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Enter skills separted by comma'}))
+    # tertiary_skills=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Enter skills separted by comma'}))
+    # secondary_skills=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Enter skills separted by comma'}))
 
 
     class Meta:
         model=JobPost
-        fields=['title','responsibilities','mand_qualification','opt_qualification','team','people','overall_experience','primary_skills','secondary_skills','tertiary_skills','status']
+        fields=['title','responsibilities','qualification','additional_qualification','team','people','overall_experience','primary_skills','secondary_skills','tertiary_skills','status']
     
    
       

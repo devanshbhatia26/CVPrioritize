@@ -11,11 +11,12 @@ from os.path import splitext, basename
 import os
 
 EXPERIENCE_CHOICES = (
-    ('1-3','1-3'),
-    ('3-6','3-6'),
-    ('6-9','6-9'),
+    ('0-2','0-2'),
+    ('3-5','3-5'),
+    ('6-8','6-8'),
     ('9-12','9-12'),
-    ('12-15','12-15')
+    ('13-15','13-15'),
+    ('15+','15+')
 )
 
 class Candidate(models.Model):
@@ -23,9 +24,10 @@ class Candidate(models.Model):
     email= models.EmailField()
     address= models.TextField(max_length=100, validators=[MinLengthValidator(3)])
     pincode = models.IntegerField()
-    experience = models.CharField(max_length=6, choices=EXPERIENCE_CHOICES, default='1-3')
+    experience = models.CharField(max_length=6, choices=EXPERIENCE_CHOICES, default='0-2')
     skills = models.CharField(max_length=100, validators=[MinLengthValidator(3)])
-    phone= models.IntegerField()
+    phone= models.CharField(max_length=15, validators=[MinLengthValidator(10)])
+    qualification = models.CharField(max_length=80, validators=[MinLengthValidator(3)])
     cv_path = models.FileField()
     created_timestamp = models.DateField()
 
@@ -35,7 +37,7 @@ class Application(models.Model):
     jobid = models.ForeignKey(JobPost)
     score = models.IntegerField()
 
-
+    
 class UploadFileModel(models.Model):
 
     # def unique_file_path(self, instance, filename):

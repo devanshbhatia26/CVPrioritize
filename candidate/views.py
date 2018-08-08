@@ -10,6 +10,7 @@ from .forms import EditDetails, UploadFile
 from django.utils import timezone
 from cvscan.cli.cli import parse
 from os.path import splitext
+from .Calc_Score import score_calculation
 
 
 def totimestamp(dt, epoch=datetime(1970,1,1)):
@@ -44,11 +45,15 @@ def editdetails(request, objId):
             q.pincode = request.POST['pincode']
             q.experience = request.POST['experience']
             q.phone = request.POST['phone']
+            q.skills = request.POST['skills']
+            q.qualification = request.POST['qualification']
             q.cv_path = obj.file
             q.created_timestamp = timezone.now()
-            
             q.save()
+            score_calculation(q)
             obj.delete()
+            
+            
             return HttpResponseRedirect(reverse('home'))
         else:
             print "Not Validated"
@@ -63,7 +68,20 @@ def editdetails(request, objId):
             qual = ", " .join(result["qualifications"])
         skill = ""
         if result["skills"]:
-            skill = ", ".join(result["skills"])
+            skill = ", ".join(result["skills"]) 
+        exp = result["experience"]
+        if exp in [0,1,2]:
+            exp = '0-2'
+        elif exp in [3,4,5]:
+            exp = '3-5'
+        elif exp in [6,7,8]:
+            exp= '6-8'
+        elif exp in [9,10,11,12]:
+            exp = '9-12'
+        elif exp in [13,14,15]:
+            exp = '13-15'
+        else:
+            exp = '15+'
         form = EditDetails(initial = {
             'name' : result["name"],
             'email' : email,
@@ -71,7 +89,8 @@ def editdetails(request, objId):
             'address' : result["address"]["district"] +", "+ result["address"]["state"],
             'pincode' : result["address"]["pincode"],
             'qualification' : qual,
-            'skills' : skill
+            'skills' : skill,
+            'experience' : exp
         })
     return render(request, 'candidate/editdetails.html', {'form': form})
 

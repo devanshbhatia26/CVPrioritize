@@ -8,25 +8,32 @@ from django.core.validators import MinLengthValidator
 
 
 EXPERIENCE_CHOICES = (
-    ('1-3','1-3'),
-    ('3-6','3-6'),
-    ('6-9','6-9'),
+    ('0-2','0-2'),
+    ('3-5','3-5'),
+    ('6-8','6-8'),
     ('9-12','9-12'),
-    ('12-15','12-15')
+    ('13-15','13-15'),
+    ('15+','15+')
 )
 
 class JobPost(models.Model):
     title= models.CharField(max_length=100,validators=[MinLengthValidator(3)])
     responsibilities = models.TextField(max_length=2000,validators=[MinLengthValidator(30)])
-    qualification = models.TextField(max_length=2000,validators=[MinLengthValidator(30)])
-    overall_experience = models.CharField(max_length=6, choices=EXPERIENCE_CHOICES, default='1-3')
-    primary_skills=TaggableManager(help_text='comma separted tags')
-    secondary_skills=models.CharField(max_length=8,blank=True,validators=[MinLengthValidator(1)])
-    tertiary_skills=models.CharField(max_length=8,blank=True,validators=[MinLengthValidator(1)])
-    status=models.IntegerField(null=True,blank=True,validators=[MinLengthValidator(3)])
-    created_timestamp=models.DateTimeField()
+    mand_qualification = models.CharField(max_length=2000,validators = [MinLengthValidator(2)])
+    opt_qualification = models.CharField(max_length=2000,null=True,blank=True,validators = [MinLengthValidator(2)])
+    overall_experience = models.CharField(max_length=6, choices=EXPERIENCE_CHOICES, default='0-2')
+    primary_skills=models.CharField(max_length=30,blank=True,validators=[MinLengthValidator(1)])
+    secondary_skills=models.CharField(max_length=30,blank=True,validators=[MinLengthValidator(1)])
+    tertiary_skills=models.CharField(max_length=30,blank=True,validators=[MinLengthValidator(1)])
+    status=models.IntegerField()
+    team= models.CharField(max_length=100,validators=[MinLengthValidator(3)])
+    people=models.IntegerField()
+    created_timestamp=models.DateTimeField(null=True,blank=True)
     updated_timestamp=models.DateTimeField(null=True, blank=True)
     deleted_timestamp=models.DateTimeField(null=True, blank=True)
+
+    def __int__(self):
+        return self.id
     
 
 

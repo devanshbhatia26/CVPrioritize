@@ -15,6 +15,13 @@
    vertical-align: middle;
 }
             </style>
+
+    <script>
+        function formSubmit(status) {
+            $("#id_status").val(status)
+            $("#form").submit();
+        }
+    </script>
     </head>
     <body>
         <div class="container">
@@ -44,8 +51,13 @@
                         {{field}}
                     </div>
                     {% endfor %}
-                    <button class="btn btn-success">Save</button>
-                   
+                    <div>
+                    <button type="submit" class="btn btn-success" onclick="formSubmit(0)">Save</button>
+                    </div>
+                    <div>
+                    <button type="submit" class="btn btn-success" onclick="formSubmit(1)">Submit</button>
+                    </div>
+
             </div>
             </form>
         </div>

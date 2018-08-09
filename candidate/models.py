@@ -36,7 +36,7 @@ class Application(models.Model):
     candidateid= models.ForeignKey(Candidate, on_delete=models.CASCADE)
     jobid = models.ForeignKey(JobPost)
     score = models.FloatField()
-
+    applied = models.BooleanField(default = False)
 
 class UploadFileModel(models.Model):
 

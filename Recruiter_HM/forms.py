@@ -48,7 +48,10 @@ class JobPostForm(forms.ModelForm):
         model=JobPost
         fields=['title','responsibilities','qualification','additional_qualification','team','people','overall_experience','primary_skills','secondary_skills','tertiary_skills','status']
     
-   
+    def __init__(self, *args, **kwargs):
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
       
         
 

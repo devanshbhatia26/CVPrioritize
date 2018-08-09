@@ -68,14 +68,14 @@ def score_calculation(resume):
             else:
                 add_qual = []
             qualification = clean_items(qualification)
-            mand_qual = clean_items(mand_qual)
-            opt_qual = clean_items(opt_qual)
+            qual = clean_items(qual)
+            add_qual = clean_items(add_qual)
 
             for i in range(len(qualification)):
-                if qualification[i] in mand_qual :
+                if qualification[i] in qual :
                     qual_score = qual_score + 10
                     continue
-                if qualification[i] in opt_qual:
+                if qualification[i] in add_qual:
                     qual_score = qual_score+ 9
                 elif qualification[i] in Qualifications["Pg"]:
                     qual_score = qual_score + 6
@@ -91,8 +91,7 @@ def score_calculation(resume):
             print(Total_Score)
     
             job=JobPost.objects.get(pk=job_desc['pk'])
-
-            Application.objects.create(score = Total_Score, candidateid = resume, jobid = job)
+            Application.objects.create(score = Total_Score, candidateid = resume, jobid = job, applied = True)
 
 
 def clean_items(qualification):

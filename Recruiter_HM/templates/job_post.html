@@ -24,6 +24,9 @@
                 </div>
             </div>
         {% endfor %}
+        {% if messages %}
+            <div class="text-danger">{{ messages }}</div>
+        {% endif %}
                     
                     <button type="submit" class="btn btn-success" onclick="formSubmit(0)">Save</button>
                     

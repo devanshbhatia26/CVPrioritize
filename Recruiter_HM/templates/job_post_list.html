@@ -11,27 +11,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script type="text/javascript">
-        function UpdatePKFunction(pk) {
-          $.ajax({
-            url: "{% url 'job_post_details' pk}",
-            method:GET
-           
-          });
-        };
-      </script>    
+       
 
-<script type="text/javascript">
-    function printChecked(){
-        var items=document.getElementsByName('status');
-        var status="";
-        for(var i=0; i<items.length; i++){
-            if(items[i].type=='checkbox' && items[i].checked==true)
-                status+=items[i].value+",";
-        }
-        window.location='http://localhost:8000/portal/job_post_details?status=' + status
-    }			
-</script>
+
 </head>
 
 
@@ -40,9 +22,29 @@
 
 
 
+    
+    <script type="text/javascript">
+        function printChecked(){
+            var items=document.getElementsByName('status');
+            var status="";
+            for(var i=0; i<items.length; i++){
+                if(items[i].type=='checkbox' && items[i].checked==true)
+                    status+=items[i].value+",";
+            }
+            window.location='http://localhost:8000/portal/job_post_details?status=' + status
+        }			
+    </script>
+        <!-- Navigation -->
+       
+
 <div class="container-fluid">
 
-          <div class="row">
+    <div class="row" style="background-color:#bce8f1">
+        <div class="col-sm-6" st></div>
+        <div  class="col-sm-6"><a href='{% url 'logout_view' %}' style="float:right"><inputbutton type="submit" class="btn btn-fail">logout</a></div>
+    </div>
+    
+    <div class="row">
 
 
             <div class="col-sm-2">
@@ -206,6 +208,13 @@
                 });
                 });
         </script>
+
+       
+
+
+
+
+
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>

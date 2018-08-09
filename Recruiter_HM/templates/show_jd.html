@@ -24,9 +24,16 @@
 <div>
 
         <div class="container-fluid">
-            {% if messages %}
+            
             <div class="row">
-                <h2>{{messages}}</h2>
+              <div class="row" style="background-color:#bce8f1">
+                <div class="col-sm-6" st></div>
+                <div  class="col-sm-6"><a href='{% url 'logout_view' %}' style="float:right"><inputbutton type="submit" class="btn btn-fail">logout</a></div>
+            </div>
+            </div>
+            <div class="row">
+              {% if messages %}
+              <h2>{{messages}}</h2>
             </div>
             {% else %}
    

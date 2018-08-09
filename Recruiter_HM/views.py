@@ -23,7 +23,9 @@ def show_jd(request,id):
     job_status=JobPost.objects.get(pk=id)
     print(job_status.status)
     if(job_status.status == 3):
-        main_list=job.application_set.filter(score__gt=77).filter()
+        main_list=job.application_set.filter(score__gt=80).order_by('-score')
+        print(main_list)
+
         return render(request,'show_jd.html',{'main_list':main_list})
 
     else:
@@ -184,10 +186,15 @@ def edit_jd(request,id):
             
             create=job.created_timestamp
             job.delete()
-            tags=list(request.POST['primary_skills'])
+            tags= [i.lower().strip() for i in request.POST['primary_skills'].split(',')]
+            sec_tags = [ i.lower().strip() for i in request.POST['secondary_skills'].split(',')]
+            tert_tags = [ i.lower().strip() for i in request.POST['tertiary_skills'].split(',')]
             for i in range(len(tags)):
-                if(tags[i]==request.POST['secondary_skills']):
-                    return render(request,'edit_jd.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
+                if(tags[i] in sec_tags ):
+                    return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and secondary skills'})
+                    
+                if(tags[i] in tert_tags):
+                    return render(request,'job_post.html',{'form':form,'messages':'You cant have same primary and tertiary skills'})
             u=form.save(commit=False)
             u.id=id
             u.created_timestamp=create

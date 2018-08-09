@@ -82,8 +82,11 @@ def editdetails(request, objId):
             exp = '13-15'
         else:
             exp = '15+'
+        name = ""
+        if result["name"]!="Applicant name couldn't be processed":
+            name = result["name"]
         form = EditDetails(initial = {
-            'name' : result["name"],
+            'name' : name,
             'email' : email,
             'phone' : result["phone_numbers"],
             'address' : result["address"]["district"] +", "+ result["address"]["state"],

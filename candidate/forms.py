@@ -16,11 +16,11 @@ class EditDetails(forms.Form):
     name=forms.CharField(min_length=4,widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Name'}))
     email=forms.EmailField(min_length=4,widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'Email'}))
     phone=forms.CharField(min_length=10,max_length=15,widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Phone Number'}))
-    address=forms.CharField(min_length=10,max_length=2000,widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Address'}))
+    address=forms.CharField(min_length=10,max_length=2000,widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Address'}))
     pincode=forms.CharField(min_length=6,max_length=6,widget=forms.NumberInput(attrs={'class':'form-control','placeholder':'PIN'}))
     experience=forms.ChoiceField(choices=EXPERIENCE_CHOICES,widget=forms.Select(attrs={'class':'form-control'}))
-    qualification=forms.CharField(min_length=3,max_length=2000,widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Qualification'}))
-    skills=forms.CharField(widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Skills'}))
+    qualification=forms.CharField(min_length=3,max_length=2000,widget=forms.TextInput(attrs={'class':'form-control','placeholder':'Qualification'}))
+    skills=forms.CharField(widget=forms.Textarea(attrs={'class':'form-control','placeholder':'Skills'}))
 
     def clean_name(self):
         if not self.cleaned_data['name']:
